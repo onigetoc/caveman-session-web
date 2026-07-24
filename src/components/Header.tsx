@@ -3,9 +3,8 @@ import {
   Zap,
   FileCode,
   Sliders,
-  Columns,
-  Maximize2,
-  Minimize2,
+  Columns2,
+  Square,
   Trash2,
   RotateCcw,
   Sparkles,
@@ -95,74 +94,48 @@ export const Header: React.FC<HeaderProps> = ({
           <span className="px-2 text-[10px] font-semibold text-slate-500 uppercase tracking-wider hidden md:inline">
             Level:
           </span>
-          <button
-            onClick={() => setLevel("lite")}
-            className={`px-2.5 py-1 rounded-lg font-medium transition-all ${
-              level === "lite"
-                ? "bg-slate-800 text-amber-300 font-semibold shadow-sm"
-                : "text-slate-400 hover:text-slate-200"
-            }`}
-            title="Lite: full sentences stripped of fluff"
-          >
-            Lite
-          </button>
-          <button
-            onClick={() => setLevel("full")}
-            className={`px-2.5 py-1 rounded-lg font-medium transition-all ${
-              level === "full"
-                ? "bg-amber-500 text-slate-950 font-bold shadow-sm"
-                : "text-slate-400 hover:text-slate-200"
-            }`}
-            title="Full: classic telegraphic caveman style (default)"
-          >
-            Full
-          </button>
-          <button
-            onClick={() => setLevel("ultra")}
-            className={`px-2.5 py-1 rounded-lg font-medium transition-all ${
-              level === "ultra"
-                ? "bg-slate-800 text-amber-300 font-semibold shadow-sm"
-                : "text-slate-400 hover:text-slate-200"
-            }`}
-            title="Ultra: one word per fact, highly condensed"
-          >
-            Ultra
-          </button>
+          {(["lite", "full", "ultra"] as const).map((lvl) => (
+            <button
+              key={lvl}
+              onClick={() => setLevel(lvl)}
+              className={`px-2.5 py-1 rounded-lg text-xs font-medium capitalize transition-all ${
+                level === lvl
+                  ? "bg-slate-800 text-slate-100 font-semibold shadow-sm"
+                  : "text-slate-400 hover:text-slate-200"
+              }`}
+              title={
+                lvl === "lite"
+                  ? "Lite: full sentences stripped of fluff"
+                  : lvl === "full"
+                  ? "Full: classic telegraphic caveman style (default)"
+                  : "Ultra: one word per fact, highly condensed"
+              }
+            >
+              {lvl}
+            </button>
+          ))}
         </div>
 
-        {/* View Mode Toggle - 2 buttons total: Columns and Toggle Maximize/Minimize */}
-        <div className="hidden lg:flex items-center bg-slate-950 p-1 rounded-xl border border-slate-800 text-xs">
-          <button
-            onClick={() => setViewMode("split")}
-            className={`p-1.5 rounded-lg transition-colors ${
-              viewMode === "split"
-                ? "bg-slate-800 text-amber-400"
-                : "text-slate-400 hover:text-slate-200"
-            }`}
-            title="Side-by-side view"
-          >
-            <Columns className="w-4 h-4" />
-          </button>
-          <button
-            onClick={() => setViewMode(viewMode === "split" ? "output" : "split")}
-            className={`p-1.5 rounded-lg transition-colors ${
-              viewMode !== "split"
-                ? "bg-slate-800 text-amber-400"
-                : "text-slate-400 hover:text-slate-200"
-            }`}
-            title={
-              viewMode === "split"
-                ? "Maximize output view (Focus)"
-                : "Minimize output view (Restore split)"
-            }
-          >
-            {viewMode === "split" ? (
-              <Maximize2 className="w-4 h-4" />
-            ) : (
-              <Minimize2 className="w-4 h-4" />
-            )}
-          </button>
-        </div>
+        {/* View Mode Control: Single Panel Toggle Button */}
+        <button
+          onClick={() => setViewMode(viewMode === "split" ? "output" : "split")}
+          className={`hidden lg:flex items-center p-2 rounded-xl border transition-all ${
+            viewMode === "output"
+              ? "bg-amber-500/10 border-amber-500/40 text-amber-400"
+              : "bg-slate-950 border-slate-800 text-slate-400 hover:text-slate-200 hover:bg-slate-800"
+          }`}
+          title={
+            viewMode === "split"
+              ? "Hide Left Transcript Panel (Single View)"
+              : "Show Left Transcript Panel (Split View)"
+          }
+        >
+          {viewMode === "split" ? (
+            <Columns2 className="w-4 h-4" />
+          ) : (
+            <Square className="w-4 h-4" />
+          )}
+        </button>
       </div>
 
       {/* Right Actions: Prompt Config & Compression Button */}
