@@ -13,6 +13,8 @@ import {
   Edit3,
 } from "lucide-react";
 
+import { PromptId } from "./PromptModal";
+
 interface MainAreaProps {
   transcript: string;
   setTranscript: (text: string) => void;
@@ -22,6 +24,7 @@ interface MainAreaProps {
   viewMode: "split" | "input" | "output";
   onCompress: () => void;
   errorMessage: string | null;
+  selectedPromptId?: PromptId;
 }
 
 export const MainArea: React.FC<MainAreaProps> = ({
@@ -33,10 +36,13 @@ export const MainArea: React.FC<MainAreaProps> = ({
   viewMode,
   onCompress,
   errorMessage,
+  selectedPromptId = "caveman",
 }) => {
   const [copiedInput, setCopiedInput] = useState(false);
   const [copiedOutput, setCopiedOutput] = useState(false);
   const [renderMode, setRenderMode] = useState<"formatted" | "raw">("formatted");
+
+  const promptName = selectedPromptId === "ponytail" ? "Ponytail" : "Caveman";
 
   const handleCopyInput = async () => {
     if (!transcript) return;
@@ -130,7 +136,7 @@ export const MainArea: React.FC<MainAreaProps> = ({
             <div className="flex items-center gap-2">
               <Sparkles className="w-4 h-4 text-amber-400" />
               <h2 className="text-xs font-semibold text-slate-200 tracking-wide uppercase">
-                Compressed Result (Caveman Method)
+                Compressed Result ({promptName} Method)
               </h2>
             </div>
 
@@ -186,10 +192,10 @@ export const MainArea: React.FC<MainAreaProps> = ({
               <div className="absolute inset-0 z-20 bg-slate-950/80 backdrop-blur-sm rounded-2xl flex flex-col items-center justify-center p-6 border border-slate-800">
                 <Loader2 className="w-8 h-8 text-amber-400 animate-spin mb-3" />
                 <p className="text-sm font-semibold text-slate-200 mb-1">
-                  Caveman compression in progress with Gemini...
+                  {promptName} compression in progress with Gemini...
                 </p>
                 <p className="text-xs text-slate-400">
-                  Applying telegraphic style with strict preservation of facts & code
+                  Applying compression prompt instructions with strict preservation of facts
                 </p>
               </div>
             )}
@@ -210,10 +216,10 @@ export const MainArea: React.FC<MainAreaProps> = ({
                   <div className="h-full flex flex-col items-center justify-center text-slate-600 text-center">
                     <Sparkles className="w-10 h-10 text-slate-700 mb-3 stroke-1" />
                     <p className="text-sm font-medium text-slate-400 mb-1">
-                      Caveman Compression Result
+                      {promptName} Compression Result
                     </p>
                     <p className="text-xs max-w-sm text-slate-500 mb-4">
-                      Click the "Compress (Caveman)" button above to run Gemini LLM processing.
+                      Click the "Compress ({promptName})" button above to run Gemini LLM processing.
                     </p>
                     {transcript && (
                       <button

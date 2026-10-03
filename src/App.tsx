@@ -2,9 +2,10 @@ import React, { useState, useMemo, useEffect } from "react";
 import { Header } from "./components/Header";
 import { MainArea } from "./components/MainArea";
 import { StatusBar } from "./components/StatusBar";
-import { PromptModal } from "./components/PromptModal";
+import { PromptModal, PromptId } from "./components/PromptModal";
 import {
   DEFAULT_CAVEMAN_PROMPT,
+  DEFAULT_PONYTAIL_PROMPT,
   SAMPLE_CONVERSATIONS,
   SampleConversation,
 } from "./constants/cavemanPrompt";
@@ -23,7 +24,14 @@ export default function App() {
   );
   const [compressedText, setCompressedText] = useState<string>("");
   const [apiUsage, setApiUsage] = useState<ApiUsage | null>(null);
-  const [prompt, setPrompt] = useState<string>(DEFAULT_CAVEMAN_PROMPT);
+  
+  const [selectedPromptId, setSelectedPromptId] = useState<PromptId>("caveman");
+  const [lastCompressedPromptId, setLastCompressedPromptId] = useState<PromptId>("caveman");
+  const [prompts, setPrompts] = useState<Record<PromptId, string>>({
+    caveman: DEFAULT_CAVEMAN_PROMPT,
+    ponytail: DEFAULT_PONYTAIL_PROMPT,
+  });
+
   const [level, setLevel] = useState<"lite" | "full" | "ultra">("full");
   const [isPromptModalOpen, setIsPromptModalOpen] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -36,6 +44,8 @@ export default function App() {
   const stats = useMemo(() => {
     return calculateComparison(transcript, compressedText);
   }, [transcript, compressedText]);
+
+  const activePromptText = prompts[selectedPromptId];
 
   // Handler for compression request
   const handleCompress = async () => {
@@ -56,7 +66,7 @@ export default function App() {
         },
         body: JSON.stringify({
           transcript,
-          prompt,
+          prompt: activePromptText,
           level,
         }),
       });
@@ -68,6 +78,7 @@ export default function App() {
       }
 
       setCompressedText(data.compressedText);
+      setLastCompressedPromptId(selectedPromptId);
       if (data.apiUsage) {
         setApiUsage(data.apiUsage);
       }
@@ -93,8 +104,11 @@ export default function App() {
     setApiUsage(null);
   };
 
-  const handleResetPrompt = () => {
-    setPrompt(DEFAULT_CAVEMAN_PROMPT);
+  const handleResetPrompt = (id: PromptId) => {
+    setPrompts((prev) => ({
+      ...prev,
+      [id]: id === "caveman" ? DEFAULT_CAVEMAN_PROMPT : DEFAULT_PONYTAIL_PROMPT,
+    }));
   };
 
   // Keyboard shortcut Ctrl+Enter / Cmd+Enter to launch compression
@@ -107,9 +121,11 @@ export default function App() {
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [transcript, prompt, level]);
+  }, [transcript, activePromptText, level]);
 
-  const isCustomPrompt = prompt.trim() !== DEFAULT_CAVEMAN_PROMPT.trim();
+  const isCustomPrompt =
+    prompts.caveman.trim() !== DEFAULT_CAVEMAN_PROMPT.trim() ||
+    prompts.ponytail.trim() !== DEFAULT_PONYTAIL_PROMPT.trim();
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans selection:bg-amber-500 selection:text-slate-950">
@@ -126,6 +142,7 @@ export default function App() {
         setViewMode={setViewMode}
         isCustomPrompt={isCustomPrompt}
         transcriptLength={transcript.length}
+        selectedPromptId={selectedPromptId}
       />
 
       {/* Main Split Section - Fills the entire right/center section */}
@@ -138,6 +155,7 @@ export default function App() {
         viewMode={viewMode}
         onCompress={handleCompress}
         errorMessage={errorMessage}
+        selectedPromptId={compressedText ? lastCompressedPromptId : selectedPromptId}
       />
 
       {/* Bottom Status & Token Statistics Bar */}
@@ -145,15 +163,18 @@ export default function App() {
         stats={stats}
         compressedText={compressedText}
         apiUsage={apiUsage}
+        selectedPromptId={compressedText ? lastCompressedPromptId : selectedPromptId}
       />
 
       {/* System Prompt Customization Modal */}
       <PromptModal
         isOpen={isPromptModalOpen}
         onClose={() => setIsPromptModalOpen(false)}
-        prompt={prompt}
-        setPrompt={setPrompt}
-        onReset={handleResetPrompt}
+        selectedPromptId={selectedPromptId}
+        setSelectedPromptId={setSelectedPromptId}
+        prompts={prompts}
+        setPrompts={setPrompts}
+        onResetPrompt={handleResetPrompt}
       />
     </div>
   );

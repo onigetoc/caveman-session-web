@@ -11,19 +11,23 @@ import {
 } from "lucide-react";
 import { CompressionComparison } from "../utils/tokenCounter";
 import { ApiUsage } from "../App";
+import { PromptId } from "./PromptModal";
 
 interface StatusBarProps {
   stats: CompressionComparison;
   compressedText: string;
   apiUsage?: ApiUsage | null;
+  selectedPromptId?: PromptId;
 }
 
 export const StatusBar: React.FC<StatusBarProps> = ({
   stats,
   compressedText,
   apiUsage,
+  selectedPromptId = "caveman",
 }) => {
   const [copied, setCopied] = useState(false);
+  const promptName = selectedPromptId === "ponytail" ? "Ponytail" : "Caveman";
 
   const handleCopy = async () => {
     if (!compressedText) return;
@@ -42,7 +46,7 @@ export const StatusBar: React.FC<StatusBarProps> = ({
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `caveman-compression-${Date.now()}.md`;
+    a.download = `${promptName.toLowerCase()}-compression-${Date.now()}.md`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -77,7 +81,7 @@ export const StatusBar: React.FC<StatusBarProps> = ({
         {/* Compressed Text Stats */}
         <div className="flex items-center gap-2">
           <div className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
-          <span className="text-slate-400 font-medium">Compressed (Caveman):</span>
+          <span className="text-slate-400 font-medium">Compressed ({promptName}):</span>
           <div className="flex items-center gap-2 font-mono text-[11px] bg-slate-900 px-2.5 py-1 rounded-lg border border-slate-800">
             <span className="text-emerald-400 font-bold">
               {stats.compressed.tokens.toLocaleString("en-US")} <span className="text-[10px] text-slate-500 font-sans">tokens</span>

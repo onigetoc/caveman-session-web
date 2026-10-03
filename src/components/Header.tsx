@@ -25,6 +25,7 @@ interface HeaderProps {
   setViewMode: (mode: "split" | "input" | "output") => void;
   isCustomPrompt: boolean;
   transcriptLength: number;
+  selectedPromptId: "caveman" | "ponytail";
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -39,6 +40,7 @@ export const Header: React.FC<HeaderProps> = ({
   setViewMode,
   isCustomPrompt,
   transcriptLength,
+  selectedPromptId,
 }) => {
   return (
     <header className="bg-slate-900 border-b border-slate-800/80 px-4 py-3 text-slate-100 flex flex-wrap items-center justify-between gap-3 sticky top-0 z-20 shadow-md">
@@ -159,10 +161,12 @@ export const Header: React.FC<HeaderProps> = ({
               ? "bg-amber-500/10 border-amber-500/40 text-amber-300"
               : "bg-slate-950 border-slate-800 text-slate-300 hover:bg-slate-800 hover:text-white"
           }`}
-          title="View or edit Caveman system prompt"
+          title="View or edit system prompts"
         >
           <FileCode className="w-3.5 h-3.5 text-amber-400" />
-          <span className="hidden sm:inline">Caveman Prompt</span>
+          <span className="hidden sm:inline">
+            Prompt: <strong className="font-semibold text-slate-100 capitalize">{selectedPromptId}</strong>
+          </span>
           {isCustomPrompt && (
             <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
           )}
@@ -186,7 +190,7 @@ export const Header: React.FC<HeaderProps> = ({
           ) : (
             <>
               <Sparkles className="w-4 h-4 fill-slate-950" />
-              <span>Compress (Caveman)</span>
+              <span>Compress ({selectedPromptId === "caveman" ? "Caveman" : "Ponytail"})</span>
             </>
           )}
         </button>
