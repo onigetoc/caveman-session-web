@@ -128,7 +128,7 @@ export default function App() {
     prompts.ponytail.trim() !== DEFAULT_PONYTAIL_PROMPT.trim();
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans selection:bg-amber-500 selection:text-slate-950">
+    <div className="h-screen overflow-hidden bg-slate-950 text-slate-100 flex flex-col font-sans selection:bg-amber-500 selection:text-slate-950">
       {/* Top Header */}
       <Header
         level={level}

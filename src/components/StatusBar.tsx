@@ -56,7 +56,7 @@ export const StatusBar: React.FC<StatusBarProps> = ({
   const hasCompressed = stats.compressed.tokens > 0;
 
   return (
-    <footer className="bg-slate-950 border-t border-slate-800/80 px-4 py-2.5 text-slate-300 text-xs flex flex-wrap items-center justify-between gap-4 sticky bottom-0 z-20 shadow-2xl backdrop-blur-md">
+    <footer className="shrink-0 bg-slate-950 border-t border-slate-800/80 px-4 py-2.5 text-slate-300 text-xs flex flex-wrap items-center justify-between gap-4 z-20 shadow-2xl backdrop-blur-md">
       {/* Left: Raw Stats (Original vs Compressed) */}
       <div className="flex flex-wrap items-center gap-4 sm:gap-6">
         {/* Original Text Stats */}

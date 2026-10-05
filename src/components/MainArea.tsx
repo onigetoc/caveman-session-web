@@ -59,7 +59,7 @@ export const MainArea: React.FC<MainAreaProps> = ({
   };
 
   return (
-    <main className="flex-1 bg-slate-950 flex flex-col md:flex-row overflow-hidden relative">
+    <main className="flex-1 min-h-0 bg-slate-950 flex flex-col md:flex-row overflow-hidden relative">
       {/* Error Notification Banner */}
       {errorMessage && (
         <div className="absolute top-3 left-1/2 -translate-x-1/2 z-30 bg-rose-500/10 border border-rose-500/30 text-rose-300 px-4 py-2 rounded-xl text-xs flex items-center gap-2 shadow-xl backdrop-blur-md">
@@ -71,7 +71,7 @@ export const MainArea: React.FC<MainAreaProps> = ({
       {/* LEFT PANE: Transcript Input Area */}
       {(viewMode === "split" || viewMode === "input") && (
         <div
-          className={`flex-1 flex flex-col border-r border-slate-800/80 bg-slate-950 p-4 min-w-0 transition-all ${
+          className={`flex-1 flex flex-col border-r border-slate-800/80 bg-slate-950 p-4 min-w-0 min-h-0 transition-all ${
             viewMode === "input" ? "w-full" : ""
           }`}
         >
@@ -100,7 +100,7 @@ export const MainArea: React.FC<MainAreaProps> = ({
             </div>
           </div>
 
-          <div className="flex-1 relative flex flex-col">
+          <div className="flex-1 min-h-0 relative flex flex-col">
             <textarea
               value={transcript}
               onChange={(e) => setTranscript(e.target.value)}
@@ -128,7 +128,7 @@ export const MainArea: React.FC<MainAreaProps> = ({
       {/* RIGHT PANE: Compressed Output Area */}
       {(viewMode === "split" || viewMode === "output") && (
         <div
-          className={`flex-1 flex flex-col bg-slate-950 p-4 min-w-0 transition-all relative ${
+          className={`flex-1 flex flex-col bg-slate-950 p-4 min-w-0 min-h-0 transition-all relative ${
             viewMode === "output" ? "w-full" : ""
           }`}
         >
@@ -186,7 +186,7 @@ export const MainArea: React.FC<MainAreaProps> = ({
             </div>
           </div>
 
-          <div className="flex-1 relative flex flex-col">
+          <div className="flex-1 min-h-0 relative flex flex-col">
             {/* Loading Overlay */}
             {isLoading && (
               <div className="absolute inset-0 z-20 bg-slate-950/80 backdrop-blur-sm rounded-2xl flex flex-col items-center justify-center p-6 border border-slate-800">
@@ -209,7 +209,7 @@ export const MainArea: React.FC<MainAreaProps> = ({
                 spellCheck={false}
               />
             ) : (
-              <div className="w-full flex-1 p-5 bg-slate-900/60 border border-slate-800 rounded-2xl text-xs font-mono leading-relaxed overflow-y-auto shadow-inner text-slate-200 select-text">
+              <div className="w-full flex-1 min-h-0 p-5 bg-slate-900/60 border border-slate-800 rounded-2xl text-xs font-mono leading-relaxed overflow-y-auto shadow-inner text-slate-200 select-text">
                 {compressedText ? (
                   <FormattedCavemanOutput text={compressedText} />
                 ) : (

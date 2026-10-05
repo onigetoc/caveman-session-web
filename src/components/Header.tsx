@@ -43,7 +43,7 @@ export const Header: React.FC<HeaderProps> = ({
   selectedPromptId,
 }) => {
   return (
-    <header className="bg-slate-900 border-b border-slate-800/80 px-4 py-3 text-slate-100 flex flex-wrap items-center justify-between gap-3 sticky top-0 z-20 shadow-md">
+    <header className="shrink-0 bg-slate-900 border-b border-slate-800/80 px-4 py-3 text-slate-100 flex flex-wrap items-center justify-between gap-3 z-20 shadow-md">
       {/* Brand & Title */}
       <div className="flex items-center gap-3">
         <div className="p-2.5 bg-gradient-to-br from-amber-500 to-orange-600 rounded-xl text-slate-950 font-black shadow-lg shadow-amber-500/20 flex items-center justify-center">

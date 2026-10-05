@@ -1,3 +1,4 @@
+import "dotenv/config";
 import express from "express";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -43,7 +44,7 @@ app.post("/api/compress", async (req, res) => {
     const userMessage = `${levelInstruction}\n\nConversation to compress follows below:\n\n${transcript}`;
 
     const response = await ai.models.generateContent({
-      model: "gemini-3.6-flash",
+      model: "gemini-3.1-flash-lite",
       contents: userMessage,
       config: {
         systemInstruction: prompt || "You are a conversation compressor.",
